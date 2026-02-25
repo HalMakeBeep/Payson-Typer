@@ -6,8 +6,9 @@ This tool can type a TypingClub lesson for you automatically.
 
 Want the easiest setup?
 
-1. Open [BOOKMARKLET_INSTALL.md](BOOKMARKLET_INSTALL.md).
-2. Drag the **Payson Typer (Drag Me)** link onto your bookmarks bar.
+1. Open [BOOKMARKLET_INSTALL.html](BOOKMARKLET_INSTALL.html).
+2. Drag the **Payson Typer (Drag Me)** button onto your bookmarks bar.
+3. If you are viewing on GitHub and it does not work, open [BOOKMARKLET_INSTALL.md](BOOKMARKLET_INSTALL.md) for fallback steps.
 
 ## How to use it (simple steps)
 
