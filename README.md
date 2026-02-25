@@ -2,18 +2,12 @@
 
 This tool can type a TypingClub lesson for you automatically.
 
-## Easy bookmark install
+## How to install!
 
-Want the easiest setup?
-
-1. Open [BOOKMARKLET_INSTALL.html](BOOKMARKLET_INSTALL.html).
-2. Drag the **Payson Typer (Drag Me)** button onto your bookmarks bar.
-3. If you are viewing on GitHub and it does not work, open [BOOKMARKLET_INSTALL.md](BOOKMARKLET_INSTALL.md) for fallback steps.
-
-## How to use it (simple steps)
+Go to [this page](https://halmakebeep.github.io/Payson-Typer/BOOKMARKLET_INSTALL.html) and drag the bookmarklet into your bookmarks bar.
 
 1. Open a TypingClub lesson.
-2. Run the bookmarklet from `paysontyper.bookmarklet.js`.
+2. Click on the bookmarklet you made from `paysontyper.bookmarklet.js`.
 3. In the panel, choose:
    - `Typing Speed (WPM)`
    - `Accuracy`
