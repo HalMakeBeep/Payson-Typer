@@ -17,15 +17,17 @@ javascript:(function(){
       var m = document.cookie.match(/payson_typer=([^;]+)/);
       if (m) return JSON.parse(decodeURIComponent(m[1]));
     } catch(e) {}
-    return { wpm: 80, accuracy: 95, variance: 40, finish: true };
+    return { wpm: 80, accuracy: 95, variance: 40 };
   }
   var prefs = loadPrefs();
 
   // -- CSS --
   var css = [
+    '@font-face{font-family:"PT Bahnschrift";src:local("Bahnschrift"),local("Bahnschrift Regular"),local("Bahnschrift SemiBold");font-style:normal;font-weight:100 900;font-display:swap;}',
+    '@font-face{font-family:"PT Bahnschrift";src:local("Bahnschrift Italic"),local("Bahnschrift SemiBold Italic");font-style:italic;font-weight:100 900;font-display:swap;}',
     '@keyframes pt-glow{0%,100%{box-shadow:0 0 18px 2px rgba(168,85,247,.35),0 8px 40px rgba(0,0,0,.7)}50%{box-shadow:0 0 28px 4px rgba(217,70,239,.5),0 8px 40px rgba(0,0,0,.7)}}',
     '@keyframes pt-shimmer{0%{background-position:0% 50%}100%{background-position:200% 50%}}',
-    '#payson-typer-root{position:fixed;top:60px;left:50%;transform:translateX(-50%);z-index:2147483647;font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;width:310px;max-width:95vw;}',
+    '#payson-typer-root{position:fixed;top:60px;left:50%;transform:translateX(-50%);z-index:2147483647;font-family:"PT Bahnschrift","Bahnschrift","Segoe UI Variable Text","Segoe UI",sans-serif;width:310px;max-width:95vw;}',
     '#pt-box{',
       'background:rgba(15,10,25,0.82);',
       'backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);',
@@ -61,15 +63,10 @@ javascript:(function(){
     'input[type=range].pt-range::-moz-range-track{height:4px;border:none;border-radius:999px;background:rgba(168,85,247,0.2);}',
     'input[type=range].pt-range::-moz-range-progress{height:4px;border:none;border-radius:999px;background:rgba(168,85,247,0.45);}',
     'input[type=range].pt-range::-moz-range-thumb{width:16px;height:16px;border-radius:50%;border:none;background:linear-gradient(135deg,#e879f9,#a855f7);box-shadow:0 2px 8px rgba(168,85,247,0.6);cursor:pointer;}',
-    '.pt-check-row{display:flex;align-items:center;gap:9px;margin-top:14px;}',
-    '.pt-check-row input[type=checkbox]{width:15px;height:15px;cursor:pointer;accent-color:#a855f7;}',
-    '.pt-check-row label{font-size:12px;color:rgba(200,180,255,0.55);cursor:pointer;font-weight:600;}',
     '#pt-btns{display:flex;gap:8px;margin-top:16px;}',
     '#pt-btn-start{flex:1;padding:11px 0;border:none;border-radius:10px;cursor:pointer;background:linear-gradient(135deg,#a855f7,#ec4899);font-size:13px;font-weight:800;color:#fff;letter-spacing:.2px;box-shadow:0 4px 20px rgba(168,85,247,0.4);transition:opacity .15s,transform .1s;}',
     '#pt-btn-start:hover{opacity:.88;transform:translateY(-1px);}',
     '#pt-btn-start:active{transform:translateY(0);}',
-    '#pt-btn-cancel{padding:11px 16px;border-radius:10px;cursor:pointer;background:rgba(255,255,255,0.04);border:1px solid rgba(168,85,247,0.2);color:rgba(200,180,255,0.45);font-size:13px;font-weight:700;transition:all .15s;}',
-    '#pt-btn-cancel:hover{color:rgba(200,180,255,0.9);border-color:rgba(168,85,247,0.5);background:rgba(168,85,247,0.08);}',
     '#pt-btn-stop{display:none;width:100%;padding:11px 0;border-radius:10px;border:1px solid rgba(239,68,68,0.3);cursor:pointer;margin-top:10px;font-size:13px;font-weight:800;letter-spacing:.2px;background:rgba(239,68,68,0.12);color:#f87171;transition:all .15s;}',
     '#pt-btn-stop:hover{background:rgba(239,68,68,0.2);border-color:rgba(239,68,68,0.5);}',
     '#pt-progress-wrap{height:3px;background:rgba(168,85,247,0.12);border-radius:3px;margin-top:12px;overflow:hidden;display:none;}',
@@ -98,12 +95,7 @@ javascript:(function(){
         '<input type="range" class="pt-range" id="pt-acc" min="50" max="100" value="' + prefs.accuracy + '" step="1">' +
         '<div class="pt-label"><span class="pt-label-text">Rhythm Variance</span><span class="pt-label-val"><span id="pt-var-val">' + prefs.variance + '</span>%</span></div>' +
         '<input type="range" class="pt-range" id="pt-var" min="0" max="100" value="' + prefs.variance + '" step="5">' +
-        '<div class="pt-check-row">' +
-          '<input type="checkbox" id="pt-finish"' + (prefs.finish ? ' checked' : '') + '>' +
-          '<label for="pt-finish">Complete final character (show results)</label>' +
-        '</div>' +
         '<div id="pt-btns">' +
-          '<button id="pt-btn-cancel">Cancel</button>' +
           '<button id="pt-btn-start">Start Typing</button>' +
         '</div>' +
         '<button id="pt-btn-stop">Stop</button>' +
@@ -193,24 +185,14 @@ javascript:(function(){
   bindRange('pt-wpm', 'pt-wpm-val');
   bindRange('pt-acc', 'pt-acc-val');
   bindRange('pt-var', 'pt-var-val');
-  document.getElementById('pt-finish').addEventListener('change', persist);
 
   function persist() {
     savePrefs({
       wpm:      parseInt(document.getElementById('pt-wpm').value, 10),
       accuracy: parseInt(document.getElementById('pt-acc').value, 10),
-      variance: parseInt(document.getElementById('pt-var').value, 10),
-      finish:   document.getElementById('pt-finish').checked
+      variance: parseInt(document.getElementById('pt-var').value, 10)
     });
   }
-
-  // -- Destroy --
-  function destroy() {
-    stopRequested = true;
-    root.remove();
-    styleEl.remove();
-  }
-  document.getElementById('pt-btn-cancel').addEventListener('click', destroy);
 
   // -- Core typing engine --
   var running = false;
@@ -275,37 +257,12 @@ javascript:(function(){
     inp.dispatchEvent(new KeyboardEvent('keyup',    { key: chr, bubbles: true, cancelable: true }));
     nativeSetter.call(inp, '');
   }
-  function sendBackspace(inp) {
-    inp.dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace', bubbles: true, cancelable: true }));
-    inp.dispatchEvent(new InputEvent('input',      { bubbles: true, cancelable: true, data: null, inputType: 'deleteContentBackward' }));
-    inp.dispatchEvent(new KeyboardEvent('keyup',   { key: 'Backspace', bubbles: true, cancelable: true }));
-    nativeSetter.call(inp, '');
-  }
-
   function sleep(ms) { return new Promise(function(r) { setTimeout(r, ms); }); }
   function wpmToMs(wpm) { return Math.round(60000 / (wpm * 5)); }
   function jitter(base, pct) {
     if (pct === 0) return base;
     var r = (Math.random() + Math.random()) / 2;
     return Math.max(20, base + (r * 2 - 1) * base * (pct / 100));
-  }
-
-  // Pre-compute exactly which indices get wrong chars to hit target accuracy
-  function buildErrorSet(total, accuracyPct) {
-    var errorSet = {};
-    var count = Math.round(total * (1 - accuracyPct / 100));
-    if (count <= 0) return errorSet;
-    var pool = [];
-    for (var i = 3; i < total - 2; i++) pool.push(i);
-    for (var j = pool.length - 1; j > 0; j--) {
-      var k = Math.floor(Math.random() * (j + 1));
-      var t = pool[j]; pool[j] = pool[k]; pool[k] = t;
-    }
-    var placed = 0, last = -10;
-    for (var n = 0; n < pool.length && placed < count; n++) {
-      if (pool[n] - last >= 3) { errorSet[pool[n]] = true; last = pool[n]; placed++; }
-    }
-    return errorSet;
   }
 
   function randomWrongChar(correct) {
@@ -324,7 +281,36 @@ javascript:(function(){
     return pick;
   }
 
-  async function autoPlay(wpm, variance, accuracy, finish) {
+  // Build an exact per-character plan up front so requested accuracy is deterministic.
+  function buildTypingPlan(chars, total, accuracyPct) {
+    var source = chars.slice(0, total);
+    var boundedAccuracy = Math.max(0, Math.min(100, accuracyPct));
+    var wrongCount = Math.round(total * (1 - boundedAccuracy / 100));
+    var replaceable = [];
+    for (var i = 0; i < source.length; i++) {
+      if (source[i] !== '\n') replaceable.push(i);
+    }
+
+    if (wrongCount > replaceable.length) wrongCount = replaceable.length;
+    for (var j = replaceable.length - 1; j > 0; j--) {
+      var k = Math.floor(Math.random() * (j + 1));
+      var t = replaceable[j]; replaceable[j] = replaceable[k]; replaceable[k] = t;
+    }
+
+    var planned = source.slice();
+    for (var n = 0; n < wrongCount; n++) {
+      var idx = replaceable[n];
+      planned[idx] = randomWrongChar(source[idx]);
+    }
+
+    return {
+      charsToType: planned,
+      wrongCount: wrongCount,
+      rightCount: total - wrongCount
+    };
+  }
+
+  async function autoPlay(wpm, variance, accuracy) {
     var chars  = getTargetChars();
     var inp    = getTypingInput();
     if (!chars.length) { setStatus('No characters found. Open a lesson first.'); resetUI(); return; }
@@ -332,22 +318,19 @@ javascript:(function(){
 
     inp.focus();
     var base   = wpmToMs(wpm);
-    var total  = finish ? chars.length : chars.length - 1;
-    var errors = buildErrorSet(total, accuracy);
+    var total  = chars.length;
+    if (!total) { setStatus('Nothing to type for this lesson state.'); resetUI(); return; }
+
+    var plan = buildTypingPlan(chars, total, accuracy);
+    setStatus('Plan: ' + plan.rightCount + ' right / ' + plan.wrongCount + ' wrong');
 
     for (var i = 0; i < total; i++) {
       if (stopRequested) { setStatus('Stopped at ' + i + ' / ' + total + '.'); resetUI(); return; }
-      if (errors[i] && chars[i] !== '\n') {
-        sendChar(randomWrongChar(chars[i]), inp);
-        await sleep(Math.max(25, jitter(base * 0.55, variance)));
-        sendBackspace(inp);
-        await sleep(Math.max(20, jitter(base * 0.35, variance)));
-      }
-      sendChar(chars[i], inp);
+      sendChar(plan.charsToType[i], inp);
       if (i % 5 === 0) { setStatus('Typing... ' + i + ' / ' + total); setProgress(Math.round(i / total * 100)); }
       await sleep(jitter(base, variance));
     }
-    setStatus('Done! ' + total + ' chars at ~' + wpm + ' wpm.');
+    setStatus('Done! ' + total + ' chars at ~' + wpm + ' wpm (' + plan.rightCount + ' right / ' + plan.wrongCount + ' wrong).');
     setProgress(100);
     resetUI();
   }
@@ -369,7 +352,7 @@ javascript:(function(){
     document.getElementById('pt-btns').style.display = 'none';
     document.getElementById('pt-btn-stop').style.display = 'block';
     setStatus('Starting...');
-    autoPlay(p.wpm, p.variance, p.accuracy, p.finish);
+    autoPlay(p.wpm, p.variance, p.accuracy);
   });
 
   document.getElementById('pt-btn-stop').addEventListener('click', function() {

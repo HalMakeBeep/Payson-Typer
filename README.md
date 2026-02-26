@@ -2,26 +2,27 @@
 
 This tool can type a TypingClub lesson for you automatically.
 
-## How to install!
+## Install the script
 
-Go to [this page](https://halmakebeep.github.io/Payson-Typer/BOOKMARKLET_INSTALL.html) and drag the bookmarklet into your bookmarks bar.
+1. Open the [Bookmarklet Installer](https://halmakebeep.github.io/Payson-Typer/BOOKMARKLET_INSTALL.html).
+2. Drag the **Payson Typer** button onto your bookmarks bar.
+
+## How to use it (simple steps)
 
 1. Open a TypingClub lesson.
-2. Click on the bookmarklet you made from `paysontyper.bookmarklet.js`.
+2. Run the bookmarklet from `paysontyper.bookmarklet.js`.
 3. In the panel, choose:
    - `Typing Speed (WPM)`
    - `Accuracy`
    - `Rhythm Variance`
-   - `Complete final character`
 4. Click **Start Typing**.
 5. Click **Stop** any time if needed.
 
 ## What each setting means
 
 - `Typing Speed`: How fast it types.
-- `Accuracy`: Lower values create more mistakes (and corrections).
+- `Accuracy`: Lower values pre-plan more mistyped character replacements.
 - `Rhythm Variance`: Higher values make timing less uniform.
-- `Complete final character`: If off, it stops typing right before the end.
 
 ## Notes
 
